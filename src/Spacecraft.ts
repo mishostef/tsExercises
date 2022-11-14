@@ -1,15 +1,22 @@
 import { SpaceLocation } from "./SpaceLocation";
-export class Spacecraft {
-    private milesPerKilometer: number = 0.621;
+import { GlobalConstants } from './globalConstants';
+import { ILogger } from "./Ilogger";
+const milesPerKilometer = GlobalConstants.milesPerKilometer;
 
-    constructor(public name: string, public speedMph: number) { }
+
+export class Spacecraft {
+    private logger: ILogger;
+
+    constructor(public name: string, public speedMph: number, logger?: ILogger) {
+        logger ? this.logger = logger : this.logger = console;
+    }
 
     getDaysToLocation(kilometersAway: number): number {
-        const milesAway = kilometersAway * this.milesPerKilometer;
+        const milesAway = kilometersAway * milesPerKilometer;
         return milesAway / (this.speedMph * 24);
     }
     printDaysToLocation(location: SpaceLocation) {
-        console.log(`${this.name} would take ${this.getDaysToLocation(location.kilometersAway)} days to get to ${location.name}.`);
+        this.logger.log(`${this.name} would take ${this.getDaysToLocation(location.kilometersAway)} days to get to ${location.name}.`);
     }
 
 }
